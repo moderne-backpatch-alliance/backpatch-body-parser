@@ -1,0 +1,21 @@
+schema: osera-patch-evidence/0.1.0
+producer: moderne
+release: 1.19.3-backpatch-00001
+baseline: v1.19.2+backpatch.baseline
+fixes:
+  - cve: CVE-2026-111181
+    upstream_fix_url: https://github.com/expressjs/body-parser/commit/1260c3845f54502a05a87594f09a334786bb34d7
+    advisory_url: https://nvd.nist.gov/vuln/detail/CVE-2026-111181
+    patch_commit_url: https://github.com/moderne-backpatch-alliance/backpatch-body-parser/commit/48c8c49
+    basis: adapted
+    artifacts:
+      - body-parser
+    note: "New in this release; upstream's fix in 1.20.9, adapted to 1.19.2. It closes the advisory: body-parser vulnerable to Denial of Service via trailing bytes after a compressed request body. As upstream's fix, this release adds the runtime dependencies destroy (~1.2.0) and unpipe (~1.0.0) to package.json; shipped as upstream has it."
+tests:
+  commit: 48c8c4936288f25deb265730f20c49f4dc098745
+  command: npm pack --ignore-scripts, npm install of the tarball (--ignore-scripts) in a fresh consumer, then mocha --require test/support/env --check-leaks test/ with the tested commit's test beside the installed package and the line's dev dependencies, each test recorded into the JUnit report
+  runtime: Node.js v16.20.2, npm 8.19.4, macOS 27.2 arm64
+  report: body-parser-1.19.3-backpatch-00001-tests.zip
+  report_sha256: 162c37d814b081a9eebcab89cfc0cc40119deadb9b830ce00fe8bef280291640
+  result: pass
+  note: "upstream's mocha suite (test/) on the packed package installed in a fresh consumer at the tested commit: 239 tests, 239 passed, 0 failed, 0 skipped. The CVE tests (test/json.js), with this release's production lines reverted at the tested commit: 62 tests, 60 passed, 2 failed, 0 skipped; with them: 62 tests, 62 passed, 0 failed, 0 skipped. Built with no build step, npm pack --ignore-scripts in a directory named body-parser, 8 of npmjs's 10 files for 1.19.2 are identical; the rest are lib/read.js, package.json. The archive's file-origins.yaml maps each packaged file to the commit, or names its inputs and build."
