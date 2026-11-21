@@ -1,0 +1,21 @@
+schema: osera-patch-evidence/0.1.0
+producer: moderne
+release: 2.2.3-backpatch-00001
+baseline: v2.2.2+backpatch.baseline
+fixes:
+  - cve: CVE-2026-111181
+    upstream_fix_url: https://github.com/expressjs/body-parser/commit/f7075eae3a84c3473ab4bf0a777da28db208e916
+    advisory_url: https://nvd.nist.gov/vuln/detail/CVE-2026-111181
+    patch_commit_url: https://github.com/moderne-backpatch-alliance/backpatch-body-parser/commit/ae7902c
+    basis: adapted
+    artifacts:
+      - body-parser
+    note: "New in this release; upstream's fix in 2.4.0, adapted to 2.2.2. It closes the advisory: body-parser vulnerable to Denial of Service via trailing bytes after a compressed request body."
+tests:
+  commit: ae7902c8bd8542f50237028d3754765ec63d39c5
+  command: npm pack --ignore-scripts, npm install of the tarball (--ignore-scripts) in a fresh consumer, then mocha --check-leaks test/ with the tested commit's test beside the installed package and the line's dev dependencies, each test recorded into the JUnit report
+  runtime: Node.js v22.16.0, npm 11.4.2, macOS 27.2 arm64
+  report: body-parser-2.2.3-backpatch-00001-tests.zip
+  report_sha256: f81f267781c7805555df701dc97bbdc2f00fe3e2699f7b4a749d385bc191117e
+  result: pass
+  note: "upstream's mocha suite (test/) on the packed package installed in a fresh consumer at the tested commit: 266 tests, 266 passed, 0 failed, 0 skipped. The CVE tests (test/json.js), with this release's production lines reverted at the tested commit: 69 tests, 67 passed, 2 failed, 0 skipped; with them: 69 tests, 69 passed, 0 failed, 0 skipped. Built with no build step, npm pack --ignore-scripts in a directory named body-parser, 8 of npmjs's 10 files for 2.2.2 are identical; the rest are lib/read.js, package.json. The archive's file-origins.yaml maps each packaged file to the commit, or names its inputs and build."
