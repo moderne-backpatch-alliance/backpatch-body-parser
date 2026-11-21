@@ -13,12 +13,14 @@
     "content-type": "~1.0.4",
     "debug": "2.6.9",
     "depd": "~1.1.2",
+    "destroy": "~1.2.0",
     "http-errors": "1.8.1",
     "iconv-lite": "0.4.24",
     "on-finished": "~2.3.0",
     "qs": "6.9.7",
     "raw-body": "2.4.3",
-    "type-is": "~1.6.18"
+    "type-is": "~1.6.18",
+    "unpipe": "~1.0.0"
   },
   "devDependencies": {
     "eslint": "7.32.0",
