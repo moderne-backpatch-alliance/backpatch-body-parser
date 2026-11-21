@@ -1,6 +1,6 @@
 schema: osera-patch-evidence/0.1.0
 producer: moderne
-release: 1.19.3-backpatch-00001
+release: 1.19.3-backpatch-00002
 baseline: v1.19.2+backpatch.baseline
 fixes:
   - cve: CVE-2026-111181
@@ -10,12 +10,20 @@ fixes:
     basis: adapted
     artifacts:
       - body-parser
-    note: "New in this release; upstream's fix in 1.20.9, adapted to 1.19.2. It closes the advisory: body-parser vulnerable to Denial of Service via trailing bytes after a compressed request body. As upstream's fix, this release adds the runtime dependencies destroy (~1.2.0) and unpipe (~1.0.0) to package.json; shipped as upstream has it."
+    note: "Carried from 1.19.3-backpatch-00001; upstream's fix in 1.20.9, adapted to 1.19.2. It closes the advisory: body-parser vulnerable to Denial of Service via trailing bytes after a compressed request body. As upstream's fix, this release adds the runtime dependencies destroy (~1.2.0) and unpipe (~1.0.0) to package.json; shipped as upstream has it."
+  - cve: CVE-2024-45590
+    upstream_fix_url: https://github.com/expressjs/body-parser/commit/b2695c4450f06ba3b0ccf48d872a229bb41c9bce
+    advisory_url: https://nvd.nist.gov/vuln/detail/CVE-2024-45590
+    patch_commit_url: https://github.com/moderne-backpatch-alliance/backpatch-body-parser/commit/95fa033
+    basis: adapted
+    artifacts:
+      - body-parser
+    note: "New in this release; upstream's fix in 1.20.3, adapted to 1.19.2. It closes the advisory: body-parser vulnerable to denial of service when url encoding is enabled. As upstream's fix, this release raises the runtime dependency qs from 6.9.7 to 6.13.0 in package.json (its strictDepth option); shipped as upstream has it."
 tests:
-  commit: 48c8c4936288f25deb265730f20c49f4dc098745
+  commit: 95fa0338df15a8055dc9f9ed1efb8e9c78a280e5
   command: npm pack --ignore-scripts, npm install of the tarball (--ignore-scripts) in a fresh consumer, then mocha --require test/support/env --check-leaks test/ with the tested commit's test beside the installed package and the line's dev dependencies, each test recorded into the JUnit report
   runtime: Node.js v16.20.2, npm 8.19.4, macOS 27.2 arm64
-  report: body-parser-1.19.3-backpatch-00001-tests.zip
-  report_sha256: 162c37d814b081a9eebcab89cfc0cc40119deadb9b830ce00fe8bef280291640
+  report: body-parser-1.19.3-backpatch-00002-tests.zip
+  report_sha256: ea0779ac4bce7634a05206735469b1b0fa1cc1002c3970f0b10fa1ca47753a8e
   result: pass
-  note: "upstream's mocha suite (test/) on the packed package installed in a fresh consumer at the tested commit: 239 tests, 239 passed, 0 failed, 0 skipped. The CVE tests (test/json.js), with this release's production lines reverted at the tested commit: 62 tests, 60 passed, 2 failed, 0 skipped; with them: 62 tests, 62 passed, 0 failed, 0 skipped. Built with no build step, npm pack --ignore-scripts in a directory named body-parser, 8 of npmjs's 10 files for 1.19.2 are identical; the rest are lib/read.js, package.json. The archive's file-origins.yaml maps each packaged file to the commit, or names its inputs and build."
+  note: "upstream's mocha suite (test/) on the packed package installed in a fresh consumer at the tested commit: 244 tests, 244 passed, 0 failed, 0 skipped. The CVE tests (test/urlencoded.js), with this release's production lines reverted at the tested commit: 70 tests, 66 passed, 4 failed, 0 skipped; with them: 70 tests, 70 passed, 0 failed, 0 skipped. Built with no build step, npm pack --ignore-scripts in a directory named body-parser, 7 of npmjs's 10 files for 1.19.2 are identical; the rest are lib/read.js, lib/types/urlencoded.js, package.json. The archive's file-origins.yaml maps each packaged file to the commit, or names its inputs and build."
